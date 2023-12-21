@@ -54,12 +54,16 @@ function Home(){
           </div>
           <br/>
           <div className="row">
-              <div className="col-12 col-md-6">
+              <div className="col-12 col-md-9">
                   <div className="context">
                       <DefaultChart/>
                   </div>
               </div>
-              <div className="col-12 col-md-6">
+              <div className="col-12 col-md-3">
+                    <MinQtyCard/>
+                    <MinQtyCard/>
+                    <MinQtyCard/>
+                    <MinQtyCard/>
                     <MinQtyCard/>
               </div>
           </div>
