@@ -5,6 +5,7 @@ import {Modal} from "react-bootstrap";
 
 
 
+
 interface Customer{
     _id:string,
     nic:string
@@ -28,6 +29,13 @@ const Customer: React.FC = () => {
     const [salary, setSalary] = useState<number | "">('')
 
 
+    const [selectedCustomerId, setSelectedCustomerId] = useState('')
+    const [updateNic, setUpdateNic] = useState('')
+    const [updateName, setUpdateName] = useState('')
+    const [updateAddress, setUpdateAddress] = useState('')
+    const [updateSalary,setUpdateSalary] = useState<number | "">('')
+
+
     const [modelstate, setModelstate] = useState<boolean>(false)
 
 
@@ -36,7 +44,28 @@ const Customer: React.FC = () => {
     const loadModel= async (id:string)=>{
      const response= await axios.get('http://localhost:3000/api/v1/customers/find-by-id/'+id)
         console.log(response.data)
+        setSelectedCustomerId(response.data._id)
+        setUpdateNic(response.data.nic)
+        setUpdateName(response.data.name)
+        setUpdateAddress(response.data.address)
+        setUpdateSalary(parseFloat(response.data.salary))
         setModelstate(true)
+    }
+
+    const updateCustomer = async () => {
+        console.log(selectedCustomerId, updateNic, updateAddress, updateName,updateSalary)
+       try {
+            const response = await axios.put('http://localhost:3000/api/v1/customers/update/'+selectedCustomerId, {
+                nic:updateNic, address:updateAddress, name:updateName, salary:updateSalary
+            });
+            console.log(response)
+             findAllCustomer()
+           setModelstate(false)
+
+
+        } catch (e) {
+            console.log(e)
+        }
 
     }
 
@@ -191,30 +220,50 @@ const Customer: React.FC = () => {
                    <hr/>
                    <div className="col-12 ">
                        <div className="form-group">
-                           <input type="text" className="form-control" placeholder={"Nic..."}/>
+                           <input type="text"
+                                  onChange={(e)=>{
+                                      setUpdateNic(e.target.value)
+                                  }}
+                                  defaultValue={updateNic} className="form-control" placeholder={"Nic..."}
+                          />
                        </div>
                    </div>
                    <br/>
                    <div className="col-12">
                        <div className="form-group">
-                           <input type="text" className="form-control" placeholder={"name..."}/>
+                           <input
+                               onChange={(e)=>{
+                                   setUpdateName(e.target.value)
+                               }}
+                               type="text" defaultValue={updateName}  className="form-control" placeholder={"name..."}
+                                 />
                        </div>
                    </div>
                    <br/>
                    <div className="col-12">
                        <div className="form-group">
-                           <input type="text" className="form-control" placeholder={"address...."}/>
+                           <input type="text"
+                                  onChange={(e)=>{
+                                      setUpdateAddress(e.target.value)
+                                  }}
+                                  defaultValue={updateAddress}  className="form-control" placeholder={"address...."}
+                                  />
                        </div>
                    </div>
                    <br/>
                    <div className="col-12">
                        <div className="form-group">
-                           <input type="text" className="form-control" placeholder={"salary..."}/>
+                           <input type="text"
+                                  onChange={(e)=>{
+                                      setUpdateSalary(e.target.value==''?'':parseFloat(e.target.value))
+                                  }}
+                                  defaultValue={updateSalary}  className="form-control" placeholder={"salary..."}
+                                 />
                        </div>
                    </div>
                         <br/>
                    <div className="col-12">
-                      <button type="button" className="btn btn-success col-12">Update customer</button>
+                      <button type="button" className="btn btn-success col-12" onClick={updateCustomer}>Update customer</button>
                        <br/>
                        <br/>
                       <button type="button" className="btn btn-danger col-12" onClick={()=>{
