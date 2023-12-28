@@ -4,7 +4,8 @@ import axios from "axios";
 
 
 interface Customer{
-    id:string,
+    _id:string,
+    nic:string
     name:string,
     address:string,
     salary:number,
@@ -26,6 +27,17 @@ const Customer: React.FC = () => {
 
 
 
+    const deleteCustomer= async (data:string)=>{
+        console.log(data)
+        const response=await  axios.delete('http://localhost:3000/api/v1/customers/delete/'+data)
+        findAllCustomer()
+        console.log(response)
+    }
+
+
+    useEffect(()=>{
+        findAllCustomer()
+    },[])
 
     const findAllCustomer=async ()=>{
     const response= await  axios.get('http://localhost:3000/api/v1/customers/find-all?searchText=&page=1&size=10')
@@ -36,10 +48,6 @@ const Customer: React.FC = () => {
 
 
     }
-
-    useEffect(()=>{
-        findAllCustomer()
-    },[])
 
     const saveCustomer = async () => {
         console.log(nic, name, address, salary)
@@ -140,7 +148,11 @@ const Customer: React.FC = () => {
                                     <td>{data.address}</td>
                                     <td>{data.salary}</td>
                                     <td>
-                                        <button className='btn btn-outline-danger btn-sm'>Delete</button>
+                                        <button className='btn btn-outline-danger btn-sm' onClick={(e)=>{
+                                            if(confirm('are you sure delete')) {
+                                               deleteCustomer(data._id)
+                                            }
+                                        }}>Delete</button>
                                     </td>
                                     <td>
                                         <button className='btn btn-outline-success btn-sm'>Update</button>
