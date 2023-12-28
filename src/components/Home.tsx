@@ -11,8 +11,7 @@ function Home(){
           <br/>
       <div className="container">
           <div className="row">
-
-              <div className="con-12 col-sm-6 col-md-4 col-lg-3">
+              <div className="col-12 col-sm-6 col-md-4 col-lg-3">
                 <DefaultCard
                     thumbnail='https://img.freepik.com/free-photo/medium-shot-people-shaking-hands_23-2149300663.jpg?w=740&t=st=1703137369~exp=1703137969~hmac=35986ede947cc3d1bd51ced58f37bc199ab223c93f17e0d2c2fdf356f075fe52'
                     title='Customer'
@@ -59,6 +58,7 @@ function Home(){
                       <DefaultChart/>
                   </div>
               </div>
+
               <div className="col-12 col-md-3">
                     <MinQtyCard/>
                     <MinQtyCard/>

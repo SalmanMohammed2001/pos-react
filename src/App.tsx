@@ -14,7 +14,7 @@ function App() {
       <Router>
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
           <div className="container-fluid">
-            <div className="navbar-brand" href="#">
+            <div className="navbar-brand" >
               <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Wattpad-logo-vector.svg/1200px-Wattpad-logo-vector.svg.png" alt=""
               className={'logo'}/>
             </div>
