@@ -1,6 +1,6 @@
-import DefaultCard from "./card/DefaultCard.tsx";
-import DefaultChart from "./card/DefaultChart.tsx";
-import MinQtyCard from "./card/MinQtyCard.tsx";
+import DefaultCard from "../card/DefaultCard.tsx";
+import DefaultChart from "../card/DefaultChart.tsx";
+import MinQtyCard from "../card/MinQtyCard.tsx";
 
 
 

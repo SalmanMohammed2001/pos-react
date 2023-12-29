@@ -1,10 +1,10 @@
 
 import {BrowserRouter as Router,Routes,Route,Link} from "react-router-dom";
 import './App.css'
-import Home from "./components/Home.tsx";
-import Customer from "./components/Customer.tsx";
-import Product from "./components/Product.tsx";
-import Order from "./components/Order.tsx";
+import Home from "./components/views/Home.tsx";
+import Customer from "./components/views/Customer.tsx";
+import Product from "./components/views/Product.tsx";
+import Order from "./components/views/Order.tsx";
 
 function App() {
 
