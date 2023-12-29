@@ -2,10 +2,26 @@ import DefaultCard from "../card/DefaultCard.tsx";
 import DefaultChart from "../card/DefaultChart.tsx";
 import MinQtyCard from "../card/MinQtyCard.tsx";
 
+import React, {useEffect, useState} from "react";
+import Product from "./Product.tsx";
+import axios from "axios";
 
 
-function Home(){
 
+const Home:React.FC=()=>{
+
+
+    const [products,setProducts]=useState<Product[]>([])
+
+    useEffect(()=>{
+        findAllProduct()
+    },[])
+    const findAllProduct=async ()=>{
+        const response= await  axios.get('http://localhost:3000/api/v1/products/find-all-min')
+        setProducts(response.data)
+
+    }
+    console.log(products)
     return(
       <>
           <br/>
@@ -60,11 +76,16 @@ function Home(){
               </div>
 
               <div className="col-12 col-md-3">
-                    <MinQtyCard/>
-                    <MinQtyCard/>
-                    <MinQtyCard/>
-                    <MinQtyCard/>
-                    <MinQtyCard/>
+                  {products.map((data,index)=>{
+                      return <MinQtyCard key={index}
+                                         name={data.name}
+                                         image={data.image}
+                                         description={data.description}
+
+                      />
+                  })}
+
+
               </div>
           </div>
       </div>

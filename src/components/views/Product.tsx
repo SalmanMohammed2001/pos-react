@@ -1,5 +1,6 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import axios from "axios";
+import {Modal} from "react-bootstrap";
 
 // import {storage} from '../config/firebase.tsx';
 
@@ -20,14 +21,24 @@ const Product:React.FC=()=>{
     const [products,setProducts]=useState<Product[]>([])
     const [image,setImage]=useState<File | null>(null)
 
+    //const [updateImage,setUpdateImage]=useState<File | null>(null)
 
-    const [modelstate, setModelstate] = useState<boolean>(false)
+    const [modelState, setModelState] = useState<boolean>(false)
 
 
     const [name,setName]=useState('')
     const [description,setDescription]=useState('')
     const [unitePrice,setUnitePrice]=useState<number | ''>('')
     const [qtyOnHand,setQtyOnHand]=useState<number | ''>('')
+
+
+    const [selectedUpdateId,setSelectedUpdateId]=useState('')
+    const [updateName,setUpdateName]=useState('')
+    const [updateDescription,setUpdateDescription]=useState('')
+    const [updateUnitePrice,setUpdateUnitePrice]=useState<number | ''>('')
+    const [updateqtyOnHand,setUpdateQtyOnHand]=useState<number | ''>('')
+
+
 
 
     const handleImage=(e:ChangeEvent<HTMLInputElement>)=> {
@@ -40,9 +51,9 @@ const Product:React.FC=()=>{
     },[])
 
 
-/*    const updateProduct = async () => {
-        console.log(selectedCustomerId, updateNic, updateAddress, updateName,updateSalary)
-        try {
+   const updateProduct = async () => {
+        console.log(selectedUpdateId, updateName, updateqtyOnHand, updateUnitePrice,updateDescription)
+        /*try {
             const response = await axios.put('http://localhost:3000/api/v1/customers/update/'+selectedCustomerId, {
                 nic:updateNic, address:updateAddress, name:updateName, salary:updateSalary
             });
@@ -53,9 +64,9 @@ const Product:React.FC=()=>{
 
         } catch (e) {
             console.log(e)
-        }
+        }*/
 
-    }*/
+    }
 
     const findAllProduct=async ()=>{
         const response= await  axios.get('http://localhost:3000/api/v1/products/find-all?searchText=&page=1&size=10')
@@ -64,28 +75,28 @@ const Product:React.FC=()=>{
 
     }
 
-  /*  const deleteProduct= async (id:string)=>{
+   const deleteProduct= async (id:string)=>{
+        if(confirm('are you delete product'))
         console.log(id)
-        const response=await  axios.delete('http://localhost:3000/api/v1/customers/delete-by-id',{params:{id}})
-        findAllCustomer()
+        const response=await  axios.delete('http://localhost:3000/api/v1/products/delete-by-id/'+id,)
+        findAllProduct()
         console.log(response)
     }
-*/
-   /* const loadModel= async (id:string)=>{
-        const response= await axios.get('http://localhost:3000/api/v1/customers/find-by-id/'+id)
-        console.log(response.data)
-        setSelectedCustomerId(response.data._id)
-        setUpdateNic(response.data.nic)
-        setUpdateName(response.data.name)
-        setUpdateAddress(response.data.address)
-        setUpdateSalary(parseFloat(response.data.salary))
-        setModelstate(true)
-    }
 
-*/
+    const loadModel= async (id:string)=>{
+        const response= await axios.get('http://localhost:3000/api/v1/products/find-by-id/'+id)
+      setSelectedUpdateId(response.data._id)
+        setUpdateName(response.data.name)
+        setUpdateQtyOnHand(parseFloat(response.data.qtyOnHand))
+        setUpdateUnitePrice(response.data.unitePrice)
+        setUpdateDescription(response.data.description)
+        setModelState(true)
+    }
+    console.log(selectedUpdateId,updateName,updateDescription,updateUnitePrice,updateqtyOnHand)
+
 
     const saveProduct= async ()=>{
-        const imageurl='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0LgIPwB4gjYlOy5_YtiC7GSU5VJQVBgwG2w&usqp=CAU'
+        const imageurl='https://off.com.ph/-/media/images/off/ph/products-en/update-983/plp/overtime-group-plp.png'
         console.log(image)
        /* if(image){
             const ref=ref(storage,`images/${Math.random()+'_'+image.name}`)
@@ -216,10 +227,12 @@ const Product:React.FC=()=>{
                                         <td>{data.qtyOnHand}</td>
                                         <td>{data.unitePrice}</td>
                                         <td>
-                                            <button className='btn btn-outline-danger btn-sm'>Delete</button>
+                                            <button className='btn btn-outline-danger btn-sm' onClick={()=> deleteProduct(data._id)}>Delete</button>
                                         </td>
                                         <td>
-                                            <button className='btn btn-outline-success btn-sm'>Update</button>
+                                            <button className='btn btn-outline-success btn-sm' onClick={()=>{
+                                                loadModel(data._id)
+                                            }}>Update</button>
                                         </td>
                                         <td>
                                             <button className='btn btn-outline-info btn-sm'>View</button>
@@ -233,6 +246,63 @@ const Product:React.FC=()=>{
                     </div>
                 </div>
             </div>
+
+            <Modal show={modelState}>
+                <div className="container">
+                    <div className="row">
+                        <div>
+                            <h2>Update Product</h2>
+                        </div>
+                        <div className={"col-12"}>
+                            <div className="form-group">
+                                <input type="text" className={"form-control"} defaultValue={updateName} onChange={(e)=>{
+                                    setUpdateName(e.target.value)
+                                }}/>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div className={"col-12"}>
+                            <div className="form-group">
+                                <input type="text" className={"form-control"} defaultValue={updateUnitePrice} onChange={(e)=>{
+                                    setUpdateUnitePrice(parseFloat(e.target.value))
+                                }}/>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div className={"col-12"}>
+                            <div className="form-group">
+                                <input type="text" className={"form-control"} defaultValue={updateqtyOnHand} onChange={(e)=>{
+                                    setUpdateQtyOnHand(parseFloat(e.target.value))
+                                }}/>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div className={"col-12"}>
+                            <div className="form-group">
+                                <textarea  cols={6} className={"form-control"} defaultValue={updateDescription} onChange={(e)=>{
+                                    setUpdateDescription(e.target.value)
+                                }}/>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div className={"col-12 mb-3"}>
+                            <button className={"btn btn-success col-12"} onClick={updateProduct}>Update</button>
+                            <br/>
+                            <br/>
+                            <button className={"btn btn-danger col-12"} onClick={()=>{
+                                setModelState(false)
+                            }}>Close</button>
+                        </div>
+                    </div>
+                </div>
+
+            </Modal>
+
         </div>
     )
 }
