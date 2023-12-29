@@ -1,6 +1,23 @@
-import React from "react";
+import React, {useState} from "react";
 
-function Product(){
+
+interface Product{
+    name:string,
+    description:string,
+    image:string,
+    unitePrice:number,
+    qtyOnHand:number
+}
+
+
+
+const Product:React.FC=()=>{
+
+    const [name,setName]=useState()
+    const [description,setDescription]=useState()
+    const [image,setImage]=useState()
+    const [unitePrice,setUnitePrice]=useState()
+    const [qtyOnHand,setQtyOnHand]=useState()
 
     const styleObj:React.CSSProperties={
         marginBottom:'20px'
