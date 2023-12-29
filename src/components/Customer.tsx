@@ -184,7 +184,7 @@ const Customer: React.FC = () => {
                             {customers.map((data,index)=>{
 
                                 return   <tr key={data._id}>
-                                    <td>{index}</td>
+                                    <td>{index+1}</td>
                                     <td>{data.nic}</td>
                                     <td>{data.name}</td>
                                     <td>{data.address}</td>
@@ -253,7 +253,7 @@ const Customer: React.FC = () => {
                    <br/>
                    <div className="col-12">
                        <div className="form-group">
-                           <input type="text"
+                           <input type="number"
                                   onChange={(e)=>{
                                       setUpdateSalary(e.target.value==''?'':parseFloat(e.target.value))
                                   }}
