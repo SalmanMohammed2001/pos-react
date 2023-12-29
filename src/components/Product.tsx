@@ -13,11 +13,13 @@ interface Product{
 
 const Product:React.FC=()=>{
 
-    const [name,setName]=useState()
-    const [description,setDescription]=useState()
-    const [image,setImage]=useState()
-    const [unitePrice,setUnitePrice]=useState()
-    const [qtyOnHand,setQtyOnHand]=useState()
+    const [products,setProducts]=useState()
+
+    const [name,setName]=useState('')
+    const [description,setDescription]=useState('')
+    const [image,setImage]=useState('')
+    const [unitePrice,setUnitePrice]=useState<number | ''>('')
+    const [qtyOnHand,setQtyOnHand]=useState<number | ''>('')
 
     const styleObj:React.CSSProperties={
         marginBottom:'20px'
@@ -32,19 +34,28 @@ const Product:React.FC=()=>{
                     <div className="col-12 col-sm-6 col-md-4" style={styleObj}>
                         <div className="form-group">
                             <label htmlFor="productName">Product Name</label>
-                            <input type="text" className="form-control" id='productName'/>
+                            <input type="text" className="form-control" id='productName'
+                                   onChange={(e)=>{
+                               setName( e.target.value)
+                            }}/>
                         </div>
                     </div>
                     <div className="col-12 col-sm-6 col-md-4" style={styleObj}>
                         <div className="form-group">
                             <label htmlFor="price">UnitePrice</label>
-                            <input type="text" className="form-control" id='price'/>
+                            <input type="number" className="form-control" id='price'
+                            onChange={(e=>{
+                                setUnitePrice(parseFloat(e.target.value))
+                            })}/>
                         </div>
                     </div>
                     <div className="col-12 col-sm-6 col-md-4" style={styleObj}>
                         <div className="form-group">
                             <label htmlFor="qty">qty On Hand</label>
-                            <input type="text" className="form-control" id='qty'/>
+                            <input type="text" className="form-control" id='qty'
+                            onChange={(e)=>{
+                                setQtyOnHand(parseFloat(e.target.value))
+                            }}/>
                         </div>
                     </div>
 
@@ -57,7 +68,10 @@ const Product:React.FC=()=>{
                     <div className="col-12" style={styleObj}>
                         <div className="form-group">
                             <label htmlFor="description">Description</label>
-                            <textarea rows={5} className="form-control" id='description'/>
+                            <textarea rows={5} className="form-control" id='description'
+                            onChange={(e)=>{
+                                setDescription(e.target.value)
+                            }}/>
                         </div>
                     </div>
 
