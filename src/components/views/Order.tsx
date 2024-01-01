@@ -1,6 +1,24 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 
-function Order(){
+interface Customer{
+    _id:string,
+    nic:string
+    name:string,
+    address:string,
+    salary:number,
+}
+
+
+interface Product{
+    _id:string
+    name:string,
+    description:string,
+    image:File | string,
+    unitePrice:number,
+    qtyOnHand:number
+}
+const Order:React.FC=()=>{
     const styleObj:React.CSSProperties={
         marginBottom:'20px'
     }
@@ -15,6 +33,19 @@ function Order(){
      color:'red',
         margin:'0'
     }
+
+    const[customersDetails,setCustomersDetails]=useState<Customer[]>([])
+
+
+    useEffect(()=>{
+        findAllCustomer()
+    },[])
+
+    const findAllCustomer=async ()=>{
+        const response= await  axios.get('http://localhost:3000/api/v1/customers/find-all?searchText=&page=1&size=10')
+        setCustomersDetails(response.data)
+    }
+    console.log(customersDetails)
     return(
         <div>
             <br/>
@@ -24,10 +55,15 @@ function Order(){
                     <div className="col-12 col-sm-6 col-md-3" style={styleObj}>
                         <div className="form-group">
                             <label htmlFor="customer">Select Customer</label>
-                            <select  id='customer' className='form-control'>
-                                <option value="#" disabled  defaultValue='Use Option'>Use Option</option>
-                                <option value="#">Customer 1</option>
-                                <option value="#">Customer 2</option>
+                            <select  id='customer' className='form-control' onChange={(e)=>{
+                                console.log(e.target.value)
+                            }}>
+                                {
+                                    customersDetails.map((data,index)=>{
+                                        return  <option value={data._id} key={index}>{data.name}</option>
+                                    })
+                                }
+
                             </select>
                         </div>
                     </div>

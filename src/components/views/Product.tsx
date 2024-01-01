@@ -3,6 +3,7 @@ import axios from "axios";
 import {Modal} from "react-bootstrap";
 import {ChangeEvent, useEffect, useState} from "react";
 
+
 // import {storage} from '../config/firebase.tsx';
 
 
@@ -10,7 +11,7 @@ interface Product{
     _id:string
     name:string,
     description:string,
-    image:string,
+    image:File | string,
     unitePrice:number,
     qtyOnHand:number
 }
@@ -20,7 +21,7 @@ interface Product{
 const Product:React.FC=()=>{
 
     const [products,setProducts]=useState<Product[]>([])
-    const [image,setImage]=useState("")
+    const [image,setImage]=useState()
 
     //const [updateImage,setUpdateImage]=useState<File | null>(null)
 
@@ -29,15 +30,16 @@ const Product:React.FC=()=>{
 
     const [name,setName]=useState('')
     const [description,setDescription]=useState('')
-    const [unitePrice,setUnitePrice]=useState<number|''>('')
-    const [qtyOnHand,setQtyOnHand]=useState<number | ''>('')
+    const [unitePrice,setUnitePrice]=useState<number| undefined>()
+    const [qtyOnHand,setQtyOnHand]=useState<number | undefined >()
 
 
     const [selectedUpdateId,setSelectedUpdateId]=useState('')
     const [updateName,setUpdateName]=useState('')
     const [updateDescription,setUpdateDescription]=useState('')
-    const [updateUnitePrice,setUpdateUnitePrice]=useState<number | ''>('')
-    const [updateqtyOnHand,setUpdateQtyOnHand]=useState<number | ''>('')
+    const [updateUnitePrice,setUpdateUnitePrice]=useState<number | undefined>()
+    const [updateQtyOnHand,setUpdateQtyOnHand]=useState<number | undefined>()
+    const [updateImage,setUpdateImage]=useState()
 
 
 
@@ -53,19 +55,23 @@ const Product:React.FC=()=>{
 
 
    const updateProduct = async () => {
-        console.log(selectedUpdateId, updateName, updateqtyOnHand, updateUnitePrice,updateDescription)
-        /*try {
-            const response = await axios.put('http://localhost:3000/api/v1/customers/update/'+selectedCustomerId, {
-                nic:updateNic, address:updateAddress, name:updateName, salary:updateSalary
-            });
+        // console.log(selectedUpdateId, updateName, updateQtyOnHand, updateUnitePrice,updateDescription,updateImage)
+       const formData=  new FormData();
+       formData.append('name',updateName);
+       formData.append('description',updateDescription);
+       formData.append('image',updateImage);
+       formData.append('unitePrice',updateUnitePrice);
+       formData.append('qtyOnHand',updateQtyOnHand);
+        try {
+            const response = await axios.put('http://localhost:3000/api/v1/products/update/'+selectedUpdateId,formData);
             console.log(response)
-            findAllCustomer()
-            setModelstate(false)
+            findAllProduct()
+            setModelState(false)
 
 
         } catch (e) {
             console.log(e)
-        }*/
+        }
 
     }
 
@@ -91,29 +97,21 @@ const Product:React.FC=()=>{
         setUpdateQtyOnHand(parseFloat(response.data.qtyOnHand))
         setUpdateUnitePrice(response.data.unitePrice)
         setUpdateDescription(response.data.description)
+
         setModelState(true)
     }
-    console.log(selectedUpdateId,updateName,updateDescription,updateUnitePrice,updateqtyOnHand)
+
+
 
 
     const saveProduct= async ()=>{
-        const imageurl='https://off.com.ph/-/media/images/off/ph/products-en/update-983/plp/overtime-group-plp.png'
-        console.log(image)
-       /* if(image){
-            const ref=ref(storage,`images/${Math.random()+'_'+image.name}`)
-            ref.put(image).then(()=>{
-                ref.getDownloadURL().then((url)=>{
-                    console.log(url)
-                })
-            })
-        }*/
         try{
 
           const formData=  new FormData();
           formData.append('name',name);
           formData.append('description',description);
-          formData.append('image',image);
-          formData.append('unitePrice',unitePrice);
+            formData.append('image',image);
+            formData.append('unitePrice',unitePrice);
           formData.append('qtyOnHand',qtyOnHand);
 
             const response = await axios.post('http://localhost:3000/api/v1/products/create', formData);
@@ -122,8 +120,8 @@ const Product:React.FC=()=>{
 
             setName('')
             setDescription('')
-            setQtyOnHand('')
-            setUnitePrice('')
+            setQtyOnHand(0)
+            setUnitePrice(0)
 
 
 
@@ -271,7 +269,7 @@ const Product:React.FC=()=>{
                         <br/>
                         <div className={"col-12"}>
                             <div className="form-group">
-                                <input type="text" className={"form-control"} defaultValue={updateUnitePrice} onChange={(e)=>{
+                                <input type="text" className={"form-control"} defaultValue={(updateUnitePrice)} onChange={(e)=>{
                                     setUpdateUnitePrice(parseFloat(e.target.value))
                                 }}/>
                             </div>
@@ -280,7 +278,7 @@ const Product:React.FC=()=>{
                         <br/>
                         <div className={"col-12"}>
                             <div className="form-group">
-                                <input type="text" className={"form-control"} defaultValue={updateqtyOnHand} onChange={(e)=>{
+                                <input type="text" className={"form-control"} defaultValue={(updateQtyOnHand)} onChange={(e)=>{
                                     setUpdateQtyOnHand(parseFloat(e.target.value))
                                 }}/>
                             </div>
@@ -289,9 +287,17 @@ const Product:React.FC=()=>{
                         <br/>
                         <div className={"col-12"}>
                             <div className="form-group">
-                                <textarea  cols={6} className={"form-control"} defaultValue={updateDescription} onChange={(e)=>{
+                                <textarea  cols={6} className={"form-control"} defaultValue={(updateDescription)} onChange={(e)=>{
                                     setUpdateDescription(e.target.value)
                                 }}/>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div className={"col-12 mt-3"}>
+                            <div className="form-group">
+                                <input type={"file"} className={"form-control"} defaultValue={updateImage}  onChange={(e)=>setUpdateImage(e.target.files[0])}/>
                             </div>
                         </div>
                         <br/>

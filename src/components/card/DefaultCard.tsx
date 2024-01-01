@@ -1,10 +1,10 @@
-import React from "react";
+
 
 interface DefaultCardData{
     thumbnail:string,
     title:string,
     description:string,
-    value:number
+    value:number | undefined
 
 }
 
