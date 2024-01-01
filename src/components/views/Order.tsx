@@ -36,6 +36,9 @@ const Order:React.FC=()=>{
 
     const[customersDetails,setCustomersDetails]=useState<Customer[]>([])
 
+    const [nic, setNic] = useState('')
+    const [address, setAddress] = useState('')
+    const [salary, setSalary] = useState<number | "">('')
 
     useEffect(()=>{
         findAllCustomer()
@@ -45,7 +48,18 @@ const Order:React.FC=()=>{
         const response= await  axios.get('http://localhost:3000/api/v1/customers/find-all?searchText=&page=1&size=10')
         setCustomersDetails(response.data)
     }
-    console.log(customersDetails)
+
+    const  loadAllCustomerDetails= async (id:string)=>{
+        const response= await axios.get('http://localhost:3000/api/v1/customers/find-by-id/'+id)
+        setNic(response.data.nic)
+        setAddress(response.data.address)
+        setSalary(response.data.salary)
+
+    }
+
+
+
+
     return(
         <div>
             <br/>
@@ -54,9 +68,9 @@ const Order:React.FC=()=>{
                 <div className="row">
                     <div className="col-12 col-sm-6 col-md-3" style={styleObj}>
                         <div className="form-group">
-                            <label htmlFor="customer">Select Customer</label>
+                            <label htmlFor="customer">Select Name</label>
                             <select  id='customer' className='form-control' onChange={(e)=>{
-                                console.log(e.target.value)
+                                loadAllCustomerDetails(e.target.value)
                             }}>
                                 {
                                     customersDetails.map((data,index)=>{
@@ -69,20 +83,20 @@ const Order:React.FC=()=>{
                     </div>
                     <div className="col-12 col-sm-6 col-md-3">
                         <div className="form-group">
-                            <label htmlFor="customername">Customer Name</label>
-                            <input type="text" disabled className="form-control" id='customerName'/>
+                            <label htmlFor="customername">Customer Nic</label>
+                            <input type="text" value={nic} disabled className="form-control" id='customerNic'/>
                         </div>
                     </div>
                     <div className="col-12 col-sm-6 col-md-3">
                         <div className="form-group">
                             <label htmlFor="customerAddress">Customer Address</label>
-                            <input type="text"  disabled className="form-control" id='customerAddes'/>
+                            <input type="text" value={address}  disabled className="form-control" id='customerAddes'/>
                         </div>
                     </div>
                     <div className="col-12 col-sm-6 col-md-3">
                         <div className="form-group">
                             <label htmlFor="customerSalary">Customer Salary</label>
-                            <input type="number" disabled className="form-control" id='customerSalary'/>
+                            <input type="number" disabled value={salary} className="form-control" id='customerSalary'/>
                         </div>
                     </div>
                 </div>
