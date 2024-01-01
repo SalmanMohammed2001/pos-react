@@ -1,6 +1,7 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+
 import axios from "axios";
 import {Modal} from "react-bootstrap";
+import {ChangeEvent, useEffect, useState} from "react";
 
 // import {storage} from '../config/firebase.tsx';
 
@@ -19,7 +20,7 @@ interface Product{
 const Product:React.FC=()=>{
 
     const [products,setProducts]=useState<Product[]>([])
-    const [image,setImage]=useState<File | null>(null)
+    const [image,setImage]=useState("")
 
     //const [updateImage,setUpdateImage]=useState<File | null>(null)
 
@@ -28,7 +29,7 @@ const Product:React.FC=()=>{
 
     const [name,setName]=useState('')
     const [description,setDescription]=useState('')
-    const [unitePrice,setUnitePrice]=useState<number | ''>('')
+    const [unitePrice,setUnitePrice]=useState<number|''>('')
     const [qtyOnHand,setQtyOnHand]=useState<number | ''>('')
 
 
@@ -41,11 +42,11 @@ const Product:React.FC=()=>{
 
 
 
-    const handleImage=(e:ChangeEvent<HTMLInputElement>)=> {
-        if (e.target.files && e.target.files[0]) {
-            setImage(e.target.files[0])
-        }
-    }
+   const handleImage=(e:ChangeEvent<HTMLInputElement>)=> {
+       if (e.target.files && e.target.files[0]) {
+           setImage(e.target.files[0])
+       }
+   }
     useEffect(()=>{
         findAllProduct()
     },[])
@@ -108,9 +109,14 @@ const Product:React.FC=()=>{
         }*/
         try{
 
-            const response = await axios.post('http://localhost:3000/api/v1/products/create', {
-                 name, description,image:imageurl,unitePrice,qtyOnHand
-            });
+          const formData=  new FormData();
+          formData.append('name',name);
+          formData.append('description',description);
+          formData.append('image',image);
+          formData.append('unitePrice',unitePrice);
+          formData.append('qtyOnHand',qtyOnHand);
+
+            const response = await axios.post('http://localhost:3000/api/v1/products/create', formData);
             console.log(response)
             findAllProduct()
 
@@ -118,6 +124,7 @@ const Product:React.FC=()=>{
             setDescription('')
             setQtyOnHand('')
             setUnitePrice('')
+
 
 
         }catch (e){
@@ -164,7 +171,7 @@ const Product:React.FC=()=>{
                     <div className="col-12 col-sm-6 col-md-4" style={styleObj}>
                         <div className="form-group">
                             <label htmlFor="qty">qty On Hand</label>
-                            <input type="text" className="form-control" id='qty' value={qtyOnHand}
+                            <input type="number" className="form-control" id='qty' value={qtyOnHand}
                             onChange={(e)=>{
                                 setQtyOnHand(parseFloat(e.target.value))
                             }}/>

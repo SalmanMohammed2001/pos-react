@@ -79,7 +79,7 @@ const Home:React.FC=()=>{
                   {products.map((data,index)=>{
                       return <MinQtyCard key={index}
                                          name={data.name}
-                                         image={data.image}
+                                         image={`http://localhost:3000/${data.image}`}
                                          description={data.description}
 
                       />
