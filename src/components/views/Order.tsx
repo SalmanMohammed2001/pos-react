@@ -17,6 +17,15 @@ interface Product{
     image:File | string,
     unitePrice:number,
     qtyOnHand:number
+
+}
+
+interface Cart{
+    _id:string,
+    description:string,
+    unitePrice:number,
+    qty:number,
+    total:number
 }
 const Order:React.FC=()=>{
     const styleObj:React.CSSProperties={
@@ -36,6 +45,8 @@ const Order:React.FC=()=>{
 
     const[customersDetails,setCustomersDetails]=useState<Customer[]>([])
     const[productDetails,setProductDetails]=useState<Product[]>([])
+    const[cart,setCart]=useState<Cart[]>([])
+
 
     const [nic, setNic] = useState('')
     const [address, setAddress] = useState('')
@@ -44,6 +55,9 @@ const Order:React.FC=()=>{
     const [description,setDescription]=useState('')
     const [unitePrice,setUnitePrice]=useState<number| undefined>()
     const [qtyOnHand,setQtyOnHand]=useState<number | undefined >()
+
+
+
 
     useEffect(()=>{
         findAllCustomerAndProduct()
@@ -168,7 +182,9 @@ const Order:React.FC=()=>{
 
                 <div className="row">
                     <div className="col-12">
-                        <button className='btn btn-primary col-12'>Add  Product</button>
+                        <button className='btn btn-primary col-12' onClick={()=>{
+
+                        }}>Add  Product</button>
                     </div>
                 </div>
                 <hr/>
@@ -187,16 +203,20 @@ const Order:React.FC=()=>{
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>#1001</td>
-                                <td>product 1</td>
-                                <td>250</td>
-                                <td>50.00</td>
-                                <td>5000.00</td>
-                                <td>
-                                    <button className='btn btn-outline-danger btn-sm'>Delete</button>
-                                </td>
-                            </tr>
+
+                            {cart.map((data,index)=>{
+                                return   <tr key={index}>
+                                    <td>{data._id}</td>
+                                    <td>{data.description}</td>
+                                    <td>{data.unitePrice}</td>
+                                    <td>{data.qty}</td>
+                                    <td>{data.total}</td>
+                                    <td>
+                                        <button className='btn btn-outline-danger btn-sm'>Delete</button>
+                                    </td>
+                                </tr>
+                            })}
+
                             </tbody>
                         </table>
 
