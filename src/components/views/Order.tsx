@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import {Card} from "react-bootstrap";
 
 interface Customer{
     _id:string,
@@ -21,10 +22,10 @@ interface Product{
 }
 
 interface Cart{
-    _id:string,
-    description:string,
-    unitePrice:number,
-    qty:number,
+    _id:string | undefined,
+    description:string| undefined,
+    unitePrice:number| undefined,
+    qty:number| undefined,
     total:number
 }
 const Order:React.FC=()=>{
@@ -48,15 +49,24 @@ const Order:React.FC=()=>{
     const[cart,setCart]=useState<Cart[]>([])
 
 
+    const[customerId,setCustomerId]=useState('')
     const [nic, setNic] = useState('')
     const [address, setAddress] = useState('')
     const [salary, setSalary] = useState<number | "">('')
 
+
+    const [productId,setProductId]=useState('')
     const [description,setDescription]=useState('')
-    const [unitePrice,setUnitePrice]=useState<number| undefined>()
-    const [qtyOnHand,setQtyOnHand]=useState<number | undefined >()
+    const [unitePrice,setUnitePrice]=useState<number| undefined>(0)
+    const [qtyOnHand,setQtyOnHand]=useState<number | undefined >(0)
+
+    const [selectProduct, setSelectProduct] = useState<Product | null>(null)
+    const [selectCustomer, setSelectCustomer] = useState<Customer | null>(null)
 
 
+
+    const[userQty,setUserQty]=useState<number >(0)
+    const[netToal,setNetTotal]=useState(0)
 
 
     useEffect(()=>{
@@ -72,8 +82,11 @@ const Order:React.FC=()=>{
         setProductDetails(products.data)
     }
 
+
     const  loadAllCustomerDetails= async (id:string)=>{
         const response= await axios.get('http://localhost:3000/api/v1/customers/find-by-id/'+id)
+        setSelectCustomer(response.data)
+        setCustomerId(response.data._id)
         setNic(response.data.nic)
         setAddress(response.data.address)
         setSalary(response.data.salary)
@@ -81,9 +94,9 @@ const Order:React.FC=()=>{
     }
 
     const  loadAllProductDetails= async (id:string)=>{
-        console.log(id)
         const response= await axios.get('http://localhost:3000/api/v1/products/find-by-id/'+id)
-        console.log(response.data)
+        setSelectProduct(response.data)
+        setProductId(response.data._id)
       setDescription(response.data.description)
       setUnitePrice(response.data.unitePrice)
       setQtyOnHand(response.data.qtyOnHand)
@@ -92,6 +105,58 @@ const Order:React.FC=()=>{
 
 
 
+
+    const addToCart=(newItem:Cart)=>{
+        setCart((prevState)=>[...prevState,newItem])
+
+
+    }
+
+
+
+
+
+
+    const isExist=(id)=>{
+        for (let i = 0; i < cart.length; i++) {
+            if(cart[i]===id){
+                console.log('salman')
+                return i;
+            }
+
+        }
+        return -1;
+
+    }
+
+    let letCart:[];
+
+/*    const addToCart=()=> {
+        const cartProduct: Cart = {
+            _id: selectProduct?._id,
+            description: description,
+            unitePrice: unitePrice,
+            qty: userQty,
+            total: (userQty * (unitePrice ? unitePrice : 0))
+        }
+
+        setCart((prevState) => [...prevState, cartProduct])
+        setTotal()
+    }*/
+
+/*
+    const setTotal= ()=>{
+       let amount=0
+
+       cart.map((data,index)=>{
+           amount+=data.total
+
+       })
+
+        setNetTotal(amount)
+       console.log(netToal)
+    }
+*/
 
     return(
         <div>
@@ -174,7 +239,7 @@ const Order:React.FC=()=>{
                     <div className="col-12 col-sm-6 col-md-2" style={styleObj}>
                         <div className="form-group">
                             <label htmlFor="qty">qty</label>
-                            <input type="number" className="form-control" id='qty'/>
+                            <input type="number" className="form-control" id='qty' onChange={(e)=>{setUserQty(parseFloat(e.target.value))}}/>
                         </div>
                     </div>
 
@@ -184,6 +249,41 @@ const Order:React.FC=()=>{
                     <div className="col-12">
                         <button className='btn btn-primary col-12' onClick={()=>{
 
+/*
+
+                           const cartProduct:Cart = {
+                                _id:String | undefined,
+                                description:String| undefined,
+                                unitePrice:Number| undefined,
+                                qty:Number| undefined,
+                                total:Number
+                            }
+*/
+
+                            const id=selectProduct?._id;
+                            const des=description
+                            const price=unitePrice
+                            const qty=userQty
+                            const total=userQty*unitePrice;
+                    //        console.log(id,des,price,qty,total)
+
+                            if(qty>qtyOnHand) {
+                                alert('invalid entry');
+                                return
+                            }
+
+
+
+                            const cartProduct:Cart={
+                                _id:selectProduct?._id,
+                                description:description,
+                                unitePrice:unitePrice,
+                                qty:userQty,
+                                total:(userQty * (unitePrice?unitePrice:0))
+                            }
+
+
+                           addToCart(cartProduct)
                         }}>Add  Product</button>
                     </div>
                 </div>
@@ -211,9 +311,16 @@ const Order:React.FC=()=>{
                                     <td>{data.unitePrice}</td>
                                     <td>{data.qty}</td>
                                     <td>{data.total}</td>
+
+
                                     <td>
-                                        <button className='btn btn-outline-danger btn-sm'>Delete</button>
+                                        <button className='btn btn-outline-danger btn-sm' onClick={(e)=>{
+                                            console.log(data._id)
+                                           setCart((prevState)=>prevState.filter((cartData)=>cartData._id!==data._id));
+                                        }}>Delete</button>
                                     </td>
+
+
                                 </tr>
                             })}
 
@@ -230,7 +337,15 @@ const Order:React.FC=()=>{
                                 </h1>
                             </div>
                             <div className="place-order-button-context">
-                                <button className='btn btn-primary '>Place Order</button>
+                                <button className='btn btn-primary ' onClick={async ()=>{
+                                    await axios.post('http://localhost:3000/api/v1/orders/create',{
+                                        date:new Date(),
+                                        customerDetails:selectCustomer,
+                                        totalCost:1500,
+                                        Product:cart
+                                    })
+
+                                }}>Place Order</button>
                             </div>
                         </div>
                     </div>
