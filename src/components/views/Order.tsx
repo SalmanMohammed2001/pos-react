@@ -104,8 +104,6 @@ const Order:React.FC=()=>{
 
 
 
-
-
     const addToCart=(newItem:Cart)=>{
         setCart((prevState)=>[...prevState,newItem])
 
@@ -129,7 +127,7 @@ const Order:React.FC=()=>{
 
     }
 
-    let letCart:[];
+ //   let letCart:[];
 
 /*    const addToCart=()=> {
         const cartProduct: Cart = {
