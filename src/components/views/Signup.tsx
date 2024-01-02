@@ -14,16 +14,26 @@ const Signup:React.FC=()=>{
 
     const signUp= async ()=>{
 
-        const response = await axios.post('http://localhost:3000/api/v1/users/signup', {
-            fullName, email, password
-        });
-        setPassword('')
-        setFullName('')
-        setPassword('')
+        try{
+            const response = await axios.post('http://localhost:3000/api/v1/users/signup', {
+                fullName, email, password
+            });
+            setPassword('')
+            setFullName('')
+            setPassword('')
 
             alert(response.data.message)
 
+
+        }catch (e){
+            console.log(e)
+        }
+
     }
+
+
+
+
     return(
         <div>
 

@@ -1,16 +1,42 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
+import axios from "axios";
+
 
 const  Login:React.FC=()=>{
 
-    const[email,setemail]=useState('')
-    const[password,setPasssword]=useState('')
+    const[email,setEmail]=useState('')
+    const[password,setPassword]=useState('')
 
 
-    const login=()=> {
-        console.log(email)
-        console.log(password)
+
+
+
+    const login= async ()=>{
+
+        try{
+            const response = await axios.post('http://localhost:3000/api/v1/users/login', {
+                 email, password
+            });
+
+            setEmail('')
+            setPassword('')
+            console.log(response.data.token)
+
+            const expirationDate=new Date();
+            expirationDate.setDate(expirationDate.getDate()+2);
+
+            const cookieValue=encodeURIComponent('token')+'='+encodeURIComponent(response.data.token)+';expires='+expirationDate.toISOString()+'; path=/'
+
+            document.cookie=cookieValue
+
+
+        }catch (e){
+            console.log(e)
+        }
+
     }
+
 
     return(
         <div>
@@ -20,12 +46,12 @@ const  Login:React.FC=()=>{
                 <div className="row">
                     <div className="col-6">
                         <div className="form-group">
-                            <input type="email" className={"form-control"} placeholder={"email Here"} onChange={(e)=>setemail(e.target.value)}/>
+                            <input type="email" className={"form-control"} placeholder={"email Here"} onChange={(e)=>setEmail(e.target.value)}/>
                         </div>
                     </div>
                     <div className="col-6">
                         <div className="form-group">
-                            <input type="password" className={"form-control"} placeholder={"password Here"} onChange={(e)=>setPasssword(e.target.value)}/>
+                            <input type="password" className={"form-control"} placeholder={"password Here"} onChange={(e)=>setPassword(e.target.value)}/>
                         </div>
                     </div>
                     <div className="col-12">
