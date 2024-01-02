@@ -46,12 +46,12 @@ const  Login:React.FC=()=>{
                 <div className="row">
                     <div className="col-6">
                         <div className="form-group">
-                            <input type="email" className={"form-control"} placeholder={"email Here"} onChange={(e)=>setEmail(e.target.value)}/>
+                            <input type="email" value={email} className={"form-control"} placeholder={"email Here"} onChange={(e)=>setEmail(e.target.value)}/>
                         </div>
                     </div>
                     <div className="col-6">
                         <div className="form-group">
-                            <input type="password" className={"form-control"} placeholder={"password Here"} onChange={(e)=>setPassword(e.target.value)}/>
+                            <input type="password"  value={password} className={"form-control"} placeholder={"password Here"} onChange={(e)=>setPassword(e.target.value)}/>
                         </div>
                     </div>
                     <div className="col-12">
