@@ -10,8 +10,9 @@ instance.interceptors.request.use(
     (config)=>{
         //token
 
-        console.log('interceptor')
-
+        let token=document.cookie.split('; ').find(record=>record.startsWith('token=')) || null
+        token=  token?.split('=')[1]
+        config.headers.Authorization=`Bearer ${token}`
         return config;
     },
     (error)=>{return Promise.reject(error)}

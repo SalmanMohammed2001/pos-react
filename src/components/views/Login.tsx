@@ -26,7 +26,7 @@ const  Login:React.FC=()=>{
             const expirationDate=new Date();
             expirationDate.setDate(expirationDate.getDate()+2);
 
-            const cookieValue=encodeURIComponent('token')+'='+encodeURIComponent(response.data.token)+';expires='+expirationDate.toISOString()+'; path=/'
+            const cookieValue=encodeURIComponent('token')+'='+encodeURIComponent(response.data.token)+'; expires='+expirationDate.toISOString()+'; path=/'
 
             document.cookie=cookieValue
 

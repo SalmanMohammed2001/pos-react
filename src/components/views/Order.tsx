@@ -84,7 +84,8 @@ const Order:React.FC=()=>{
 
 
     const  loadAllCustomerDetails= async (id:string)=>{
-        const response= await AxiosInstance.get('/customers/find-by-id/'+id)
+
+       const response= await AxiosInstance.get('/customers/find-by-id/'+id)
         setSelectCustomer(response.data)
         setCustomerId(response.data._id)
         setNic(response.data.nic)
