@@ -6,6 +6,7 @@ import Customer from "./components/views/Customer.tsx";
 import Product from "./components/views/Product.tsx";
 import Order from "./components/views/Order.tsx";
 import Login from "./components/views/Login.tsx";
+import Signup from "./components/views/Signup.tsx";
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
           <Route path={'/product'} element={<Product/>}/>
           <Route path={'/order'} element={<Order/>}/>
           <Route path={'/login'} element={<Login/>}/>
+          <Route path={'/signup'} element={<Signup/>}/>
         </Routes>
       </Router>
     </div>
