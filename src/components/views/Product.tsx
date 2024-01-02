@@ -1,5 +1,5 @@
 
-import axios from "axios";
+import AxiosInstance from "../config/axiosInstance.ts";
 import {Modal} from "react-bootstrap";
 import {ChangeEvent, useEffect, useState} from "react";
 
@@ -63,8 +63,8 @@ const Product:React.FC=()=>{
        formData.append('unitePrice',updateUnitePrice);
        formData.append('qtyOnHand',updateQtyOnHand);
         try {
-            const response = await axios.put('http://localhost:3000/api/v1/products/update/'+selectedUpdateId,formData);
-            console.log(response)
+            const response = await AxiosInstance.put('http://localhost:3000/api/v1/products/update/'+selectedUpdateId,formData);
+           // console.log(response)
             findAllProduct()
             setModelState(false)
 
@@ -76,8 +76,8 @@ const Product:React.FC=()=>{
     }
 
     const findAllProduct=async ()=>{
-        const response= await  axios.get('http://localhost:3000/api/v1/products/find-all?searchText=&page=1&size=10')
-         console.log(response.data)
+        const response= await  AxiosInstance.get('http://localhost:3000/api/v1/products/find-all?searchText=&page=1&size=10')
+        // console.log(response.data)
         setProducts(response.data)
 
     }
@@ -85,13 +85,13 @@ const Product:React.FC=()=>{
    const deleteProduct= async (id:string)=>{
         if(confirm('are you delete product'))
         console.log(id)
-        const response=await  axios.delete('http://localhost:3000/api/v1/products/delete-by-id/'+id,)
+        const response=await  AxiosInstance.delete('http://localhost:3000/api/v1/products/delete-by-id/'+id,)
         findAllProduct()
         console.log(response)
     }
 
     const loadModel= async (id:string)=>{
-        const response= await axios.get('http://localhost:3000/api/v1/products/find-by-id/'+id)
+        const response= await AxiosInstance.get('http://localhost:3000/api/v1/products/find-by-id/'+id)
       setSelectedUpdateId(response.data._id)
         setUpdateName(response.data.name)
         setUpdateQtyOnHand(parseFloat(response.data.qtyOnHand))
@@ -114,7 +114,7 @@ const Product:React.FC=()=>{
             formData.append('unitePrice',unitePrice);
           formData.append('qtyOnHand',qtyOnHand);
 
-            const response = await axios.post('http://localhost:3000/api/v1/products/create', formData);
+            const response = await AxiosInstance.post('http://localhost:3000/api/v1/products/create', formData);
             console.log(response)
             findAllProduct()
 

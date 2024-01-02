@@ -1,6 +1,7 @@
 import {Link} from "react-router-dom";
 import React, {useState} from "react";
-import axios from "axios";
+
+import AxiosInstance from "../config/axiosInstance.ts";
 
 
 const Signup:React.FC=()=>{
@@ -15,7 +16,7 @@ const Signup:React.FC=()=>{
     const signUp= async ()=>{
 
         try{
-            const response = await axios.post('http://localhost:3000/api/v1/users/signup', {
+            const response = await AxiosInstance.post('http://localhost:3000/api/v1/users/signup', {
                 fullName, email, password
             });
             setPassword('')

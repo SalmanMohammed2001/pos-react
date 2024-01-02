@@ -4,7 +4,7 @@ import MinQtyCard from "../card/MinQtyCard.tsx";
 
 import React, {useEffect, useState} from "react";
 import Product from "./Product.tsx";
-import axios from "axios";
+import AxiosInstance from "../config/axiosInstance.ts";
 
 
 
@@ -22,23 +22,23 @@ const Home:React.FC=()=>{
         findAllCount()
     },[])
     const findAllProduct=async ()=>{
-        const response= await  axios.get('http://localhost:3000/api/v1/products/find-all-min')
+        const response= await  AxiosInstance.get('http://localhost:3000/api/v1/products/find-all-min')
         setProducts(response.data)
 
     }
     const findAllCount=async ()=>{
-        const product= await  axios.get('http://localhost:3000/api/v1/products/find-all-count')
+        const product= await  AxiosInstance.get('http://localhost:3000/api/v1/products/find-all-count')
         setProductsCount(product.data)
 
 
-        const customer= await  axios.get('http://localhost:3000/api/v1/customers/find-all-count')
+        const customer= await  AxiosInstance.get('http://localhost:3000/api/v1/customers/find-all-count')
         setCustomerCount(customer.data)
 
 
-        const order= await  axios.get('http://localhost:3000/api/v1/orders/find-all-count')
+        const order= await  AxiosInstance.get('http://localhost:3000/api/v1/orders/find-all-count')
         setOrderCount(order.data)
 
-        const result= await  axios.get('http://localhost:3000/api/v1/orders/find-all-income')
+        const result= await  AxiosInstance.get('http://localhost:3000/api/v1/orders/find-all-income')
         setIncome(result.data.totalCostSum)
 
     }

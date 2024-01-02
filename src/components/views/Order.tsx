@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
-import {Card} from "react-bootstrap";
+
+import AxiosInstance from "../config/axiosInstance.ts";
 
 interface Customer{
     _id:string,
@@ -75,16 +75,16 @@ const Order:React.FC=()=>{
     },[])
 
     const findAllCustomerAndProduct=async ()=>{
-        const customer= await  axios.get('http://localhost:3000/api/v1/customers/find-all?searchText=&page=1&size=10')
+        const customer= await  AxiosInstance.get('http://localhost:3000/api/v1/customers/find-all?searchText=&page=1&size=10')
         setCustomersDetails(customer.data)
 
-        const products= await  axios.get('http://localhost:3000/api/v1/products/find-all?searchText=&page=1&size=10')
+        const products= await  AxiosInstance.get('http://localhost:3000/api/v1/products/find-all?searchText=&page=1&size=10')
         setProductDetails(products.data)
     }
 
 
     const  loadAllCustomerDetails= async (id:string)=>{
-        const response= await axios.get('http://localhost:3000/api/v1/customers/find-by-id/'+id)
+        const response= await AxiosInstance.get('http://localhost:3000/api/v1/customers/find-by-id/'+id)
         setSelectCustomer(response.data)
         setCustomerId(response.data._id)
         setNic(response.data.nic)
@@ -94,7 +94,7 @@ const Order:React.FC=()=>{
     }
 
     const  loadAllProductDetails= async (id:string)=>{
-        const response= await axios.get('http://localhost:3000/api/v1/products/find-by-id/'+id)
+        const response= await AxiosInstance.get('http://localhost:3000/api/v1/products/find-by-id/'+id)
         setSelectProduct(response.data)
         setProductId(response.data._id)
       setDescription(response.data.description)
@@ -115,7 +115,7 @@ const Order:React.FC=()=>{
 
 
 
-    const isExist=(id)=>{
+/*    const isExist=(id)=>{
         for (let i = 0; i < cart.length; i++) {
             if(cart[i]===id){
                 console.log('salman')
@@ -125,7 +125,7 @@ const Order:React.FC=()=>{
         }
         return -1;
 
-    }
+    }*/
 
  //   let letCart:[];
 
@@ -258,11 +258,11 @@ const Order:React.FC=()=>{
                             }
 */
 
-                            const id=selectProduct?._id;
+                        /*    const id=selectProduct?._id;
                             const des=description
                             const price=unitePrice
                             const qty=userQty
-                            const total=userQty*unitePrice;
+                            const total=userQty*unitePrice;*/
                     //        console.log(id,des,price,qty,total)
 
                             if(qty>qtyOnHand) {
@@ -336,7 +336,7 @@ const Order:React.FC=()=>{
                             </div>
                             <div className="place-order-button-context">
                                 <button className='btn btn-primary ' onClick={async ()=>{
-                                    await axios.post('http://localhost:3000/api/v1/orders/create',{
+                                    await AxiosInstance.post('http://localhost:3000/api/v1/orders/create',{
                                         date:new Date(),
                                         customerDetails:selectCustomer,
                                         totalCost:1500,

@@ -1,20 +1,19 @@
-import axios,{AxiosInstance,AxiosRequestConfig} from "axios";
+import axios, {AxiosInstance} from "axios";
 
 
 
 const instance:AxiosInstance=axios.create();
 
 instance.interceptors.request.use(
-    (config:AxiosRequestConfig)=>{
+    (config)=>{
         //token
 
+        console.log('interceptor')
+
         return config;
-    }
+    },
+    (error)=>{return Promise.reject(error)}
 )
 
-const AxiosInstance=()=>{
 
-
-}
-
-export default AxiosInstance;
+export default instance;

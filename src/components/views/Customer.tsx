@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
+import AxiosInstance from "../config/axiosInstance.ts";
 import {Modal} from "react-bootstrap";
 
 
@@ -42,7 +42,7 @@ const Customer: React.FC = () => {
 
 
     const loadModel= async (id:string)=>{
-     const response= await axios.get('http://localhost:3000/api/v1/customers/find-by-id/'+id)
+     const response= await AxiosInstance.get('http://localhost:3000/api/v1/customers/find-by-id/'+id)
         console.log(response.data)
         setSelectedCustomerId(response.data._id)
         setUpdateNic(response.data.nic)
@@ -55,7 +55,7 @@ const Customer: React.FC = () => {
     const updateCustomer = async () => {
         console.log(selectedCustomerId, updateNic, updateAddress, updateName,updateSalary)
        try {
-            const response = await axios.put('http://localhost:3000/api/v1/customers/update/'+selectedCustomerId, {
+            const response = await AxiosInstance.put('http://localhost:3000/api/v1/customers/update/'+selectedCustomerId, {
                 nic:updateNic, address:updateAddress, name:updateName, salary:updateSalary
             });
             console.log(response)
@@ -71,7 +71,7 @@ const Customer: React.FC = () => {
 
     const deleteCustomer= async (id:string)=>{
         console.log(id)
-        const response=await  axios.delete('http://localhost:3000/api/v1/customers/delete-by-id',{params:{id}})
+        const response=await  AxiosInstance.delete('http://localhost:3000/api/v1/customers/delete-by-id',{params:{id}})
         findAllCustomer()
         console.log(response)
     }
@@ -82,7 +82,7 @@ const Customer: React.FC = () => {
     },[])
 
     const findAllCustomer=async ()=>{
-    const response= await  axios.get('http://localhost:3000/api/v1/customers/find-all?searchText=&page=1&size=10')
+    const response= await  AxiosInstance.get('http://localhost:3000/api/v1/customers/find-all?searchText=&page=1&size=10')
       // console.log(response.data)
        setCustomers(response.data)
 
@@ -94,7 +94,7 @@ const Customer: React.FC = () => {
     const saveCustomer = async () => {
         console.log(nic, name, address, salary)
         try {
-            const response = await axios.post('http://localhost:3000/api/v1/customers/create', {
+            const response = await AxiosInstance.post('http://localhost:3000/api/v1/customers/create', {
                 nic, name, address, salary
             });
             console.log(response)
