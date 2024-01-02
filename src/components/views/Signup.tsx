@@ -16,7 +16,7 @@ const Signup:React.FC=()=>{
     const signUp= async ()=>{
 
         try{
-            const response = await AxiosInstance.post('http://localhost:3000/api/v1/users/signup', {
+            const response = await AxiosInstance.post('/users/signup', {
                 fullName, email, password
             });
             setPassword('')
