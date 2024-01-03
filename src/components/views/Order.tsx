@@ -72,6 +72,7 @@ const Order:React.FC=()=>{
     useEffect(()=>{
         findAllCustomerAndProduct()
 
+
     },[])
 
     const findAllCustomerAndProduct=async ()=>{
@@ -106,9 +107,15 @@ const Order:React.FC=()=>{
 
 
     const addToCart=(newItem:Cart)=>{
-        setCart((prevState)=>[...prevState,newItem])
+      //  cart.push(newItem)
+       setCart((prevState)=>[...prevState,newItem])
 
 
+        setTimeout(()=>{
+            for (let i = 0; i <cart.length ; i++) {
+                console.log(cart[i].description)
+            }
+        },500)
     }
 
 
@@ -116,46 +123,34 @@ const Order:React.FC=()=>{
 
 
 
-/*    const isExist=(id)=>{
-        for (let i = 0; i < cart.length; i++) {
-            if(cart[i]===id){
-                console.log('salman')
-                return i;
-            }
+    const isExist=(id:string)=>{
 
+       console.log('id'+ id)
+
+        for (let i = 0; i <cart.length ; i++) {
+            if(cart[i]._id===id){
+              return i;
+            }
         }
+
         return -1;
 
-    }*/
-
- //   let letCart:[];
-
-/*    const addToCart=()=> {
-        const cartProduct: Cart = {
-            _id: selectProduct?._id,
-            description: description,
-            unitePrice: unitePrice,
-            qty: userQty,
-            total: (userQty * (unitePrice ? unitePrice : 0))
-        }
-
-        setCart((prevState) => [...prevState, cartProduct])
-        setTotal()
-    }*/
-
-/*
-    const setTotal= ()=>{
-       let amount=0
-
-       cart.map((data,index)=>{
-           amount+=data.total
-
-       })
-
-        setNetTotal(amount)
-       console.log(netToal)
     }
-*/
+
+
+
+
+
+
+    const setTotal= ()=>{
+        let netTotal=0;
+        cart.forEach(response=>{
+            netTotal+=response.total;
+        });
+        console.log(netTotal)
+
+    }
+
 
     return(
         <div>
@@ -259,21 +254,48 @@ const Order:React.FC=()=>{
                             }
 */
 
-                        /*    const id=selectProduct?._id;
+                           const id=selectProduct?._id;
                             const des=description
                             const price=unitePrice
                             const qty=userQty
-                            const total=userQty*unitePrice;*/
+                            const total=userQty*unitePrice;
                     //        console.log(id,des,price,qty,total)
 
-                            if(qty>qtyOnHand) {
+                            if(userQty>qtyOnHand) {
                                 alert('invalid entry');
                                 return
                             }
 
+                            let rows=  isExist(id)
+
+                            if(rows===-1){
+                                const cartProduct:Cart={
+                                    _id:selectProduct?._id,
+                                    description:description,
+                                    unitePrice:unitePrice,
+                                    qty:userQty,
+                                    total:(userQty * (unitePrice?unitePrice:0))
+                                }
+                                addToCart(cartProduct)
 
 
-                            const cartProduct:Cart={
+                            }else {
+                                let existTotal= cart[rows].qty+qty;
+                                if(qtyOnHand<existTotal){
+                                    alert('invalid entry');
+                                    return;
+
+                                }
+
+                                cart[rows].qty=existTotal
+                                cart[rows].total=cart[rows].total+total
+
+
+                            }
+
+
+
+                           /* const cartProduct:Cart={
                                 _id:selectProduct?._id,
                                 description:description,
                                 unitePrice:unitePrice,
@@ -282,7 +304,7 @@ const Order:React.FC=()=>{
                             }
 
 
-                           addToCart(cartProduct)
+                           addToCart(cartProduct)*/
                         }}>Add  Product</button>
                     </div>
                 </div>
@@ -310,15 +332,12 @@ const Order:React.FC=()=>{
                                     <td>{data.unitePrice}</td>
                                     <td>{data.qty}</td>
                                     <td>{data.total}</td>
-
-
                                     <td>
                                         <button className='btn btn-outline-danger btn-sm' onClick={(e)=>{
                                             console.log(data._id)
                                            setCart((prevState)=>prevState.filter((cartData)=>cartData._id!==data._id));
                                         }}>Delete</button>
                                     </td>
-
 
                                 </tr>
                             })}
@@ -343,6 +362,8 @@ const Order:React.FC=()=>{
                                         totalCost:1500,
                                         Product:cart
                                     })
+                                    setCart([])
+                                    alert('order placed')
 
                                 }}>Place Order</button>
                             </div>
